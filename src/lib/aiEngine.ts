@@ -30,7 +30,7 @@ export function calculateProfile(answers: Record<string, number>[]) {
   const maxPossible = answers.length * 3;
   const normalized = Object.fromEntries(
     Object.entries(traits).map(([k, v]) => [k, Math.round((v / maxPossible) * 100)])
-  ) as TraitScores;
+  ) as unknown as TraitScores;
 
   return normalized;
 }
