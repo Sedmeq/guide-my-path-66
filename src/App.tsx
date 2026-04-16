@@ -8,6 +8,7 @@ import Assessment from "./pages/Assessment.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Careers from "./pages/Careers.tsx";
 import Learning from "./pages/Learning.tsx";
+import Games from "./pages/Games.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/learning" element={<Learning />} />
+          <Route path="/games" element={<Games />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

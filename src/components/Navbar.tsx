@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Careers", path: "/careers" },
   { label: "Learning", path: "/learning" },
+  { label: "Games", path: "/games" },
 ];
 
 export function Navbar() {
