@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import Assessment from "./pages/Assessment.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Careers from "./pages/Careers.tsx";
+import CVReview from "./pages/CVReview.tsx";
 import Learning from "./pages/Learning.tsx";
 import Games from "./pages/Games.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/cv-review" element={<CVReview />} />
           <Route path="/learning" element={<Learning />} />
           <Route path="/games" element={<Games />} />
           <Route path="*" element={<NotFound />} />

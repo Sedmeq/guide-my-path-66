@@ -30,7 +30,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground"
         >
-          Find Your <span className="gradient-primary bg-clip-text text-transparent">Perfect</span> Career Path
+          Find Your <span className="gradient-primary text-white bg-clip-text">Perfect</span> Career Path
         </motion.h1>
 
         <motion.p

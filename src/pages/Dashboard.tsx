@@ -21,9 +21,9 @@ const Dashboard = () => {
 
   const topCareers = results
     ? results.careers.slice(0, 4).map((c) => {
-        const mock = mockCareers.find((m) => m.title === c.career);
-        return mock ? { ...mock, matchPercentage: c.score } : null;
-      }).filter(Boolean)
+      const mock = mockCareers.find((m) => m.title === c.career);
+      return mock ? { ...mock, matchPercentage: c.score } : null;
+    }).filter(Boolean)
     : mockCareers.slice(0, 4);
 
   const radarData = skills.map((s) => ({ subject: s.name, value: s.level }));
@@ -31,6 +31,10 @@ const Dashboard = () => {
   const topTraitNames = results
     ? results.topTraits.slice(0, 4).map((t) => t.name.charAt(0).toUpperCase() + t.name.slice(1).replace(/([A-Z])/g, " $1"))
     : ["Creative", "Empathetic", "Analytical", "Adaptive"];
+
+  const highestCareerTitle = topCareers[0]?.title?.toLowerCase() || "";
+  const isEngineer = highestCareerTitle.includes("engineer") || highestCareerTitle.includes("developer");
+  const videoSrc = isEngineer ? "/DevVideo.mp4" : "/UIVideo.mp4";
 
   return (
     <div className="min-h-screen bg-background">
@@ -42,6 +46,8 @@ const Dashboard = () => {
             {results ? "Your AI-powered career profile based on your assessment" : "Take the assessment to get personalized results"}
           </p>
         </motion.div>
+
+
 
         {/* Top row: Personality + Radar */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -125,28 +131,44 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-        {/* Learning Path Preview */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-          className="p-6 rounded-2xl bg-card shadow-card mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-foreground flex items-center gap-2"><BookOpen className="w-5 h-5 text-primary" /> Your Learning Path</h2>
-            <Button variant="ghost" size="sm" onClick={() => navigate("/learning")} className="text-primary">View full path <ChevronRight className="w-4 h-4 ml-1" /></Button>
-          </div>
-          <div className="space-y-3">
-            {learningPath.slice(0, 4).map((s, i) => (
-              <div key={s.id} className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${s.completed ? "gradient-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-                  {i + 1}
+        {/* Learning Path Preview & Video */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+            className="p-6 rounded-2xl bg-card shadow-card">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2"><BookOpen className="w-5 h-5 text-primary" /> Your Learning Path</h2>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/learning")} className="text-primary">View full path <ChevronRight className="w-4 h-4 ml-1" /></Button>
+            </div>
+            <div className="space-y-3">
+              {learningPath.slice(0, 4).map((s, i) => (
+                <div key={s.id} className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${s.completed ? "gradient-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+                    {i + 1}
+                  </div>
+                  <div className="flex-1">
+                    <p className={`font-medium ${s.completed ? "text-foreground" : "text-muted-foreground"}`}>{s.title}</p>
+                    <p className="text-xs text-muted-foreground">{s.duration} · {s.type}</p>
+                  </div>
+                  {s.completed && <span className="text-xs font-semibold text-primary">✓ Done</span>}
                 </div>
-                <div className="flex-1">
-                  <p className={`font-medium ${s.completed ? "text-foreground" : "text-muted-foreground"}`}>{s.title}</p>
-                  <p className="text-xs text-muted-foreground">{s.duration} · {s.type}</p>
-                </div>
-                {s.completed && <span className="text-xs font-semibold text-primary">✓ Done</span>}
-              </div>
-            ))}
-          </div>
-        </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
+            className="rounded-2xl overflow-hidden shadow-card border border-border flex items-center justify-center bg-black">
+            <video
+              key={videoSrc}
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls
+              className="w-full h-full object-contain max-h-[350px]"
+            />
+          </motion.div>
+        </div>
 
         {/* Mentors & Opportunities */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -172,10 +194,9 @@ const Dashboard = () => {
             <div className="space-y-3">
               {opportunities.map((o) => (
                 <div key={o.id} className="flex items-center gap-3 p-3 rounded-xl border border-border">
-                  <div className={`px-2 py-1 rounded-lg text-xs font-semibold ${
-                    o.type === "internship" ? "bg-primary/10 text-primary" :
+                  <div className={`px-2 py-1 rounded-lg text-xs font-semibold ${o.type === "internship" ? "bg-primary/10 text-primary" :
                     o.type === "job" ? "bg-accent/10 text-accent" : "bg-secondary/10 text-secondary-foreground"
-                  }`}>{o.type}</div>
+                    }`}>{o.type}</div>
                   <div className="flex-1">
                     <p className="font-medium text-foreground">{o.title}</p>
                     <p className="text-xs text-muted-foreground">{o.company} · {o.location}</p>

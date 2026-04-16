@@ -8,6 +8,7 @@ const navLinks = [
   { label: "Assessment", path: "/assessment" },
   { label: "Dashboard", path: "/dashboard" },
   { label: "Careers", path: "/careers" },
+  { label: "CV Yoxlama", path: "/cv-review" },
   { label: "Learning", path: "/learning" },
   { label: "Games", path: "/games" },
 ];
