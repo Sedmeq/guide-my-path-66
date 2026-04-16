@@ -1,25 +1,46 @@
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
-import { userSkills, careers, learningPath, mentors, opportunities } from "@/lib/mockData";
+import { userSkills, careers as mockCareers, learningPath, mentors, opportunities } from "@/lib/mockData";
 import { TrendingUp, Target, BookOpen, Users, Briefcase, ChevronRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, ResponsiveContainer } from "recharts";
-
-const radarData = userSkills.map((s) => ({ subject: s.name, value: s.level }));
+import { useAssessmentResults } from "@/lib/useAssessmentResults";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const results = useAssessmentResults();
+
+  // Use dynamic data if assessment was taken, otherwise mock
+  const skills = results
+    ? results.skills
+    : userSkills;
+
+  const personalityType = results?.personalityType || "The Innovator";
+
+  const topCareers = results
+    ? results.careers.slice(0, 4).map((c) => {
+        const mock = mockCareers.find((m) => m.title === c.career);
+        return mock ? { ...mock, matchPercentage: c.score } : null;
+      }).filter(Boolean)
+    : mockCareers.slice(0, 4);
+
+  const radarData = skills.map((s) => ({ subject: s.name, value: s.level }));
+
+  const topTraitNames = results
+    ? results.topTraits.slice(0, 4).map((t) => t.name.charAt(0).toUpperCase() + t.name.slice(1).replace(/([A-Z])/g, " $1"))
+    : ["Creative", "Empathetic", "Analytical", "Adaptive"];
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-20 max-w-6xl mx-auto px-4 pb-16">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 pt-4">
           <h1 className="text-3xl font-bold text-foreground">Welcome back, Explorer! 👋</h1>
-          <p className="text-muted-foreground mt-1">Here's your AI-powered career profile</p>
+          <p className="text-muted-foreground mt-1">
+            {results ? "Your AI-powered career profile based on your assessment" : "Take the assessment to get personalized results"}
+          </p>
         </motion.div>
 
         {/* Top row: Personality + Radar */}
@@ -31,15 +52,17 @@ const Dashboard = () => {
                 <Zap className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-foreground">The Innovator</h2>
+                <h2 className="text-lg font-bold text-foreground">{personalityType}</h2>
                 <p className="text-sm text-muted-foreground">Your AI Personality Type</p>
               </div>
             </div>
             <p className="text-muted-foreground mb-4">
-              You combine creative thinking with empathy — a rare and powerful combination. You naturally understand people and find elegant solutions to complex problems.
+              {results
+                ? `Based on your assessment, your top traits are ${topTraitNames.slice(0, 2).join(" and ")}. This unique combination opens exciting career opportunities.`
+                : "You combine creative thinking with empathy — a rare and powerful combination. You naturally understand people and find elegant solutions to complex problems."}
             </p>
             <div className="flex flex-wrap gap-2">
-              {["Creative", "Empathetic", "Analytical", "Adaptive"].map((t) => (
+              {topTraitNames.map((t) => (
                 <span key={t} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">{t}</span>
               ))}
             </div>
@@ -65,7 +88,7 @@ const Dashboard = () => {
             <h2 className="text-lg font-bold text-foreground flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary" /> Skill Levels</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {userSkills.map((s) => (
+            {skills.map((s) => (
               <div key={s.name}>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="font-medium text-foreground">{s.name}</span>
@@ -85,7 +108,7 @@ const Dashboard = () => {
             <Button variant="ghost" size="sm" onClick={() => navigate("/careers")} className="text-primary">View all <ChevronRight className="w-4 h-4 ml-1" /></Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {careers.slice(0, 4).map((c) => (
+            {(topCareers as any[]).map((c: any) => (
               <button key={c.id} onClick={() => navigate("/careers")}
                 className="p-4 rounded-xl border border-border hover:border-primary/30 transition-colors text-left">
                 <div className="flex items-center gap-3 mb-2">
