@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const topCareers = results
     ? results.careers.slice(0, 4).map((c) => {
-      const mock = mockCareers.find((m) => m.title === c.career);
+      const mock = mockCareers.find((m) => m.id === c.career || m.title === c.career);
       return mock ? { ...mock, matchPercentage: c.score } : null;
     }).filter(Boolean)
     : mockCareers.slice(0, 4);
@@ -32,9 +32,15 @@ const Dashboard = () => {
     ? results.topTraits.slice(0, 4).map((t) => t.name.charAt(0).toUpperCase() + t.name.slice(1).replace(/([A-Z])/g, " $1"))
     : ["Creative", "Empathetic", "Analytical", "Adaptive"];
 
-  const highestCareerTitle = topCareers[0]?.title?.toLowerCase() || "";
-  const isEngineer = highestCareerTitle.includes("engineer") || highestCareerTitle.includes("developer");
-  const videoSrc = isEngineer ? "/DevVideo.mp4" : "/UIVideo.mp4";
+  const highestCareerId = topCareers[0]?.id || "";
+  let videoSrc = "/UIVideo.mp4";
+  if (highestCareerId === "software-engineer") {
+    videoSrc = "/DevVideo.mp4";
+  } else if (highestCareerId === "product-manager") {
+    videoSrc = "/ProductVideo.mp4";
+  } else if (highestCareerId === "data-scientist") {
+    videoSrc = "/DataVideo.mp4";
+  }
 
   return (
     <div className="min-h-screen bg-background">

@@ -24,7 +24,7 @@ export function Navbar() {
           <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-primary-foreground" />
           </div>
-          PathFinder
+          MajorVision
         </Link>
 
         {/* Desktop */}
@@ -33,11 +33,10 @@ export function Navbar() {
             <Link
               key={l.path}
               to={l.path}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                location.pathname === l.path
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${location.pathname === l.path
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
+                }`}
             >
               {l.label}
             </Link>
@@ -64,9 +63,8 @@ export function Navbar() {
               key={l.path}
               to={l.path}
               onClick={() => setOpen(false)}
-              className={`block px-4 py-2 rounded-xl text-sm font-medium ${
-                location.pathname === l.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
-              }`}
+              className={`block px-4 py-2 rounded-xl text-sm font-medium ${location.pathname === l.path ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                }`}
             >
               {l.label}
             </Link>
